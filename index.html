@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reel & Rig — Video Editor / On-Set Crew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0A0B0D;
+    --panel:#16181C;
+    --panel-2:#1D2024;
+    --line:#2A2D33;
+    --amber:#FF9142;
+    --cyan:#4FD1FF;
+    --paper:#F2F1ED;
+    --grey:#8B8D93;
+    --grey-dim:#5B5D63;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    background:var(--void);
+    color:var(--paper);
+    font-family:'Work Sans', sans-serif;
+    font-weight:300;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,.display{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.03em;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img,video{max-width:100%; display:block;}
+
+  ::selection{background:var(--amber); color:var(--void);}
+
+  :focus-visible{
+    outline:2px solid var(--cyan);
+    outline-offset:3px;
+  }
+
+  .container{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ===== NAV — timeline scrubber bar ===== */
+  .nav{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    background:rgba(10,11,13,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+    height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .nav-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:14px;
+  }
+  .rec-dot{
+    width:8px; height:8px;
+    border-radius:50%;
+    background:#FF4D4D;
+    box-shadow:0 0 8px #FF4D4D;
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:0.35;}
+  }
+  .nav-tc{
+    color:var(--grey);
+    font-size:13px;
+  }
+  .nav-links{
+    display:flex;
+    gap:28px;
+    font-size:13px;
+  }
+  .nav-links a{
+    color:var(--grey);
+    position:relative;
+    padding-bottom:4px;
+    transition:color 0.2s;
+  }
+  .nav-links a::after{
+    content:'';
+    position:absolute;
+    left:0; bottom:0;
+    width:0%;
+    height:2px;
+    background:var(--amber);
+    transition:width 0.25s ease;
+  }
+  .nav-links a:hover{color:var(--paper);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-links{display:none;}
+  @media (min-width:760px){ .nav-links{display:flex;} }
+
+  /* ===== HERO ===== */
+  .hero{
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-top:120px;
+    padding-bottom:60px;
+    position:relative;
+  }
+  .hero-eyebrow{
+    font-size:12px;
+    color:var(--cyan);
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .hero-eyebrow .bar{
+    width:28px; height:1px;
+    background:var(--cyan);
+  }
+  .hero h1{
+    font-size:clamp(2.6rem, 7vw, 5.2rem);
+    line-height:1.02;
+    max-width:900px;
+  }
+  .hero h1 .accent{color:var(--amber);}
+  .hero-sub{
+    margin-top:24px;
+    max-width:560px;
+    color:var(--grey);
+    font-size:17px;
+  }
+  .hero-roles{
+    margin-top:34px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .role-chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--paper);
+    border:1px solid var(--line);
+    padding:7px 12px;
+    border-radius:3px;
+    background:var(--panel);
+  }
+  .role-chip b{color:var(--amber);}
+
+  .hero-monitor{
+    margin-top:56px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    background:var(--panel);
+    padding:14px;
+    max-width:760px;
+  }
+  .monitor-screen{
+    aspect-ratio:16/9;
+    border-radius:3px;
+    background:
+      repeating-linear-gradient(100deg,
+        #1c1e22 0%, #23262b 6%, #1c1e22 12%),
+      linear-gradient(135deg, #14161a, #0c0d10);
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .monitor-screen::before{
+    content:'';
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(
+      0deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px,
+      transparent 1px, transparent 3px);
+    pointer-events:none;
+  }
+  .monitor-bars{
+    display:flex;
+    height:100%;
+    width:100%;
+    opacity:0.5;
+  }
+  .monitor-bars span{flex:1; height:100%;}
+  .monitor-label{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:8px;
+  }
+  .monitor-label .play{
+    width:56px; height:56px;
+    border-radius:50%;
+    border:1px solid rgba(242,241,237,0.35);
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(10,11,13,0.4);
+  }
+  .monitor-label .play::after{
+    content:'';
+    border-style:solid;
+    border-width:8px 0 8px 13px;
+    border-color:transparent transparent transparent var(--paper);
+    margin-left:3px;
+  }
+  .monitor-caption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--grey-dim);
+  }
+  .monitor-footer{
+    display:flex;
+    justify-content:space-between;
+    margin-top:12px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--grey-dim);
+  }
+
+  /* ===== ROLES / TRACKS SECTION ===== */
+  .tracks{
+    padding:100px 0;
+    border-top:1px solid var(--line);
+  }
+  .section-head{
+    margin-bottom:56px;
+    max-width:640px;
+  }
+  .section-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--grey-dim);
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .section-head h2{
+    font-size:clamp(1.8rem, 4vw, 2.6rem);
+  }
+
+  .track-row{
+    display:grid;
+    grid-template-columns:110px 1fr;
+    border-top:1px solid var(--line);
+    padding:26px 0;
+    gap:24px;
+    align-items:start;
+  }
+  .track-row:last-child{border-bottom:1px solid var(--line);}
+  .track-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    padding-top:2px;
+  }
+  .track-tag .track-code{
+    display:inline-block;
+    padding:3px 8px;
+    border-radius:3px;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .track-content h3{
+    font-size:20px;
+    margin-bottom:8px;
+  }
+  .track-content p{
+    color:var(--grey);
+    font-size:15px;
+    max-width:640px;
+  }
+  .tc-edit .track-code{background:rgba(79,209,255,0.12); color:var(--cyan);}
+  .tc-lx .track-code{background:rgba(255,145,66,0.14); color:var(--amber);}
+  .tc-audio .track-code{background:rgba(120,200,140,0.14); color:#7FD79A;}
+  .tc-dir .track-code{background:rgba(200,150,255,0.14); color:#C79BFF;}
+  .tc-pa .track-code{background:rgba(255,209,102,0.14); color:#FFD166;}
+
+  /* ===== WORK ===== */
+  .work{
+    padding:100px 0;
+    border-top:1px solid var(--line);
+  }
+  .filters{
+    display:flex;
+    gap:10px;
+    margin-bottom:40px;
+    flex-wrap:wrap;
+  }
+  .filter-btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    padding:9px 16px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    background:transparent;
+    color:var(--grey);
+    cursor:pointer;
+    transition:all 0.2s;
+  }
+  .filter-btn:hover{border-color:var(--grey);}
+  .filter-btn.active{
+    background:var(--paper);
+    color:var(--void);
+    border-color:var(--paper);
+  }
+
+  .work-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+    gap:22px;
+  }
+  .work-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    overflow:hidden;
+    transition:transform 0.25s ease, border-color 0.25s ease;
+  }
+  .work-card:hover{
+    transform:translateY(-4px);
+    border-color:var(--grey-dim);
+  }
+  .work-thumb{
+    aspect-ratio:16/9;
+    background:linear-gradient(135deg, #1c1e22, #101216);
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .work-card[data-cat="reels"] .work-thumb{aspect-ratio:9/16;}
+  .work-thumb .tc-overlay{
+    position:absolute;
+    bottom:10px; left:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    color:rgba(242,241,237,0.6);
+    background:rgba(0,0,0,0.4);
+    padding:2px 6px;
+    border-radius:2px;
+  }
+  .work-thumb .play-sm{
+    width:40px; height:40px;
+    border-radius:50%;
+    border:1px solid rgba(242,241,237,0.3);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .work-thumb .play-sm::after{
+    content:'';
+    border-style:solid;
+    border-width:6px 0 6px 10px;
+    border-color:transparent transparent transparent rgba(242,241,237,0.7);
+    margin-left:2px;
+  }
+  .work-thumb.embed{padding:0;}
+  .work-thumb.embed iframe{width:100%; height:100%; border:0; display:block;}
+  .work-thumb.link-out{
+    flex-direction:column;
+    gap:10px;
+    text-decoration:none;
+    color:var(--paper);
+    transition:background 0.2s;
+  }
+  .work-thumb.link-out:hover{background:rgba(255,255,255,0.03);}
+  .work-thumb.link-out .ext-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--grey);
+  }
+  div.work-thumb.link-out{cursor:default;}
+  div.work-thumb.link-out .ext-label{color:var(--grey-dim);}
+  .work-info{
+    padding:16px 18px 18px;
+  }
+  .work-info .cat-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:var(--amber);
+    text-transform:uppercase;
+    margin-bottom:6px;
+    display:block;
+  }
+  .work-info h3{
+    font-size:16px;
+    font-weight:500;
+    font-family:'Space Grotesk', sans-serif;
+  }
+  .work-info p{
+    font-size:13px;
+    color:var(--grey-dim);
+    margin-top:4px;
+  }
+
+  .work-note{
+    margin-top:28px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--grey-dim);
+    border-left:2px solid var(--line);
+    padding-left:14px;
+  }
+
+  /* ===== ABOUT + SERVICES ===== */
+  .about{
+    padding:100px 0;
+    border-top:1px solid var(--line);
+    display:grid;
+    grid-template-columns:1fr;
+    gap:56px;
+  }
+  @media (min-width:860px){
+    .about{grid-template-columns:1fr 1fr;}
+  }
+  .about-copy p{
+    color:var(--grey);
+    font-size:16px;
+    margin-bottom:16px;
+    max-width:480px;
+  }
+  .skills{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:24px;
+  }
+  .skill-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--grey);
+    border:1px solid var(--line);
+    padding:6px 10px;
+    border-radius:3px;
+  }
+
+  .service-list{border-top:1px solid var(--line);}
+  .service-item{
+    padding:20px 0;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .service-item h3{
+    font-size:16px;
+    font-weight:500;
+  }
+  .service-item p{
+    font-size:13.5px;
+    color:var(--grey-dim);
+    margin-top:4px;
+    max-width:300px;
+  }
+  .service-item .num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--grey-dim);
+    white-space:nowrap;
+  }
+
+  /* ===== CONTACT ===== */
+  .contact{
+    padding:110px 0 90px;
+    border-top:1px solid var(--line);
+  }
+  .contact h2{
+    font-size:clamp(2rem, 5vw, 3.2rem);
+    max-width:640px;
+  }
+  .contact-sub{
+    color:var(--grey);
+    margin-top:18px;
+    max-width:480px;
+  }
+  .contact-actions{
+    margin-top:40px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+    align-items:center;
+  }
+  .btn-primary{
+    background:var(--amber);
+    color:var(--void);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    font-weight:600;
+    padding:15px 26px;
+    border-radius:4px;
+    display:inline-block;
+    transition:opacity 0.2s;
+  }
+  .btn-primary:hover{opacity:0.85;}
+  .contact-links{
+    display:flex;
+    gap:22px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    color:var(--grey);
+  }
+  .contact-links a:hover{color:var(--cyan);}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:26px 0;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--grey-dim);
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.in{
+    opacity:1;
+    transform:translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <span class="rec-dot"></span>
+      <span class="mono">REC</span>
+      <span class="nav-tc mono" id="navClock">00:00:00:00</span>
+    </div>
+    <div class="nav-links mono">
+      <a href="#tracks">Roles</a>
+      <a href="#credits">Credits</a>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero container">
+  <div class="hero-eyebrow mono"><span class="bar"></span>FREELANCE VIDEO EDITOR &amp; ON-SET CREW</div>
+  <h1>Cuts that land.<br>Sets that <span class="accent">run on time.</span></h1>
+  <p class="hero-sub">I edit long-form video, Instagram reels, and social ad content — and on set, I run lighting, sound, and act as assistant director. One person who understands the whole chain, from slate to final export.</p>
+
+  <div class="hero-roles">
+    <span class="role-chip"><b>V1</b> Editor</span>
+    <span class="role-chip"><b>LX</b> Gaffer</span>
+    <span class="role-chip"><b>A1</b> Audio</span>
+    <span class="role-chip"><b>AD</b> Assistant Director</span>
+    <span class="role-chip"><b>PA</b> Production Assistant</span>
+    <span class="role-chip"><b>PR</b> Producer</span>
+  </div>
+
+  <div class="hero-monitor">
+    <div class="monitor-screen">
+      <div class="monitor-bars">
+        <span style="background:#3a3a3a"></span>
+        <span style="background:#4a4238"></span>
+        <span style="background:#3d4a45"></span>
+        <span style="background:#3a3d4a"></span>
+        <span style="background:#453a4a"></span>
+        <span style="background:#2f2f2f"></span>
+      </div>
+      <div class="monitor-label">
+        <div class="play"></div>
+        <span class="monitor-caption">SHOWREEL_2026_MASTER.MOV — drop your reel embed here</span>
+      </div>
+    </div>
+    <div class="monitor-footer">
+      <span>SRC: MAIN_TIMELINE</span>
+      <span id="heroTc">00:00:12:03 / 01:24:00</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===== ROLES / TRACKS ===== -->
+<section class="tracks container" id="tracks">
+  <div class="section-head reveal">
+    <div class="section-eyebrow">On the timeline</div>
+    <h2>Four tracks, one operator</h2>
+  </div>
+
+  <div class="track-row reveal tc-edit">
+    <div class="track-tag"><span class="track-code">V1 — EDIT</span></div>
+    <div class="track-content">
+      <h3>Video Editing</h3>
+      <p>Long-form video, Instagram reels, and paid social ads. Pacing, sound design, colour, and delivery specs tuned to where the piece is actually going to run.</p>
+    </div>
+  </div>
+
+  <div class="track-row reveal tc-lx">
+    <div class="track-tag"><span class="track-code">LX — GAFFER</span></div>
+    <div class="track-content">
+      <h3>Lighting</h3>
+      <p>On-set lighting setup and execution — building looks that hold up in the edit, not just on the monitor.</p>
+    </div>
+  </div>
+
+  <div class="track-row reveal tc-audio">
+    <div class="track-tag"><span class="track-code">A1 — AUDIO</span></div>
+    <div class="track-content">
+      <h3>Sound</h3>
+      <p>Production audio and boom operation, so the edit starts with clean dialogue instead of a cleanup job.</p>
+    </div>
+  </div>
+
+  <div class="track-row reveal tc-dir">
+    <div class="track-tag"><span class="track-code">DIR — AD</span></div>
+    <div class="track-content">
+      <h3>Assistant Director</h3>
+      <p>Scheduling, shot lists, and keeping the day moving — the production side of understanding what the edit will actually need.</p>
+    </div>
+  </div>
+
+  <div class="track-row reveal tc-pa">
+    <div class="track-tag"><span class="track-code">PA — SUPPORT</span></div>
+    <div class="track-content">
+      <h3>Production Assistant</h3>
+      <p>Set logistics, equipment runs, and general on-the-ground support — filling gaps so the crew stays focused and the day stays on schedule.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ON-SET CREDITS ===== -->
+<section class="work container" id="credits">
+  <div class="section-head reveal">
+    <div class="section-eyebrow">On-set credits</div>
+    <h2>Where I've worked the floor</h2>
+  </div>
+
+  <div class="filters reveal" data-target="creditGrid">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="lighting">Lighting</button>
+    <button class="filter-btn" data-filter="sound">Sound</button>
+    <button class="filter-btn" data-filter="ad">AD</button>
+    <button class="filter-btn" data-filter="pa">PA</button>
+    <button class="filter-btn" data-filter="producer">Producer</button>
+    <button class="filter-btn" data-filter="producer">Producer</button>
+  </div>
+
+  <div class="work-grid reveal" id="creditGrid">
+    <div class="work-card" data-cat="lighting">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DJ_hBwnzYrH/?igsh=MWlpNm16YjBjdng3Zw==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Lighting / Gaffer</span>
+        <h3>Hadalabo X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="lighting">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DQbeWFCAay9/?igsh=MTY4a2VpNWh6ejcyNg==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Lighting / Gaffer</span>
+        <h3>Colgate X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="lighting">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DT1vGz1Aej1/?igsh=MXA2YWl6MThtMzkzcQ==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Lighting / Gaffer</span>
+        <h3>Hadalabo X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="lighting">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DMHT58aRzqS/?igsh=cmpsaGI0Z2VpbHFh" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Lighting / Gaffer</span>
+        <h3>The Delivery Vault</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="lighting">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DSJliARAQpj/?igsh=MXB0OXdmYWpzcGt5Mg==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Lighting / Gaffer</span>
+        <h3>Moodfree X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="lighting">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DR1oNKQAdz5/?igsh=MTU2eDRtNnNuOGp5Yw==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Lighting / Gaffer</span>
+        <h3>Stryv X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="lighting">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DTAVJsNAVHd/?igsh=enNrNzh0NHNwbjZq" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Lighting / Gaffer</span>
+        <h3>Taobao X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="lighting">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DUiJ6JfAb8_/?igsh=MTVxaTVpc2E0YmhwMw==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Lighting / Gaffer</span>
+        <h3>Kewpie X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="lighting">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DUad60tgXLm/?igsh=Y2l0bTZuOHoxc3Vu" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Lighting / Gaffer</span>
+        <h3>Scentify X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="lighting">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DUVUiHzgdlR/?igsh=ZXM1aXdqdThvZmtu" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Lighting / Gaffer</span>
+        <h3>Darlie X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="sound">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DNAL3ljTS48/?igsh=eHN3ZGVyNmN0MWsy" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Sound</span>
+        <h3>Takdir Kedua</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="sound">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DQesaIdAdbs/?igsh=ZWMwdDl0NjlwaHgy" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Sound</span>
+        <h3>Puteri Gantian</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="sound">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DRE4tEKD5XH/?igsh=dW92Z3c1Y3doajQz" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Sound</span>
+        <h3>40 Sahaja</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="sound">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/Da0cfdLDali/?igsh=MXQ2bGVjdW5hNnV6Nw==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Sound</span>
+        <h3>《酒店智多星》</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="pa">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DTcmmBqAZwx/?igsh=NDh2OTZnNTkybnp6" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Production Assistant</span>
+        <h3>100 Plus X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="pa">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DUHwZtjARaL/?igsh=MWx4aXJqZ2VyZnBscA==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Production Assistant</span>
+        <h3>Kleenex X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="pa">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DRBgV4pAY_j/?igsh=cms0ZDV3NXozZXlo" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Production Assistant</span>
+        <h3>Proton X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="pa">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DUxkxHtgbg9/?igsh=MzE4NG53MnRoMWpi&wa_logging_event=video_play_open" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Production Assistant</span>
+        <h3>《马上还钱》新年MV</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="pa">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DWYku85AWq6/?igsh=MXN6Y3ZzenN6cTJjdA==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Production Assistant</span>
+        <h3>Ecovacs X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="pa">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DYmRtdfBDR0/?igsh=c2ZyOTJwdHpvZGIx" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Production Assistant</span>
+        <h3>Eucerin X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="pa">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DYJNhNrBnmX/?igsh=MTh3N25pODg1MzNqOA==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Production Assistant</span>
+        <h3>KFC X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="pa">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DaPwOaaBjvi/?igsh=bzhucXFuZXdydmJ2" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram &rarr;</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Production Assistant</span>
+        <h3>Darlie X Elaine</h3>
+      </div>
+    </div>
+    <div class="work-card" data-cat="ad">
+      <div class="work-thumb embed"><iframe src="https://www.youtube.com/embed/AHLjUwURkzo" title="The Split Program 頑美世界" loading="lazy" allowfullscreen></iframe></div>
+      <div class="work-info">
+        <span class="cat-label">Assistant Director</span>
+        <h3>《The Split Program 頑美世界》</h3>
+        <p>Position: 2nd AD</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="producer">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/C55yHE6RBWN/?igsh=MXQ1bjE4a3R6Y2ZlZA==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Producer</span>
+        <h3>《Incompatible Bonds 不適合》</h3>
+        <p>Position: Producer, Story, 2nd Cam, Lighting (Gaffer), Props, Editor</p>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="work-note reveal">Lighting/Gaffer, Sound, Production Assistant, Assistant Director, and Producer credits are listed. A couple of entries don't have a public link yet — send those over when you have them.</p>
+</section>
+
+<!-- ===== WORK ===== -->
+<section class="work container" id="work">
+  <div class="section-head reveal">
+    <div class="section-eyebrow">Selected work</div>
+    <h2>Recent cuts</h2>
+  </div>
+
+  <div class="filters reveal" data-target="workGrid">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="longform">Long-Form</button>
+    <button class="filter-btn" data-filter="reels">IG Reels</button>
+    <button class="filter-btn" data-filter="ads">Social Ads</button>
+  </div>
+
+  <div class="work-grid reveal" id="workGrid">
+    <div class="work-card" data-cat="longform">
+      <div class="work-thumb embed"><iframe src="https://www.youtube.com/embed/8GRBJvDlItg" title="傾傾偈子 Ladies N' Gentlemen EP3" loading="lazy" allowfullscreen></iframe></div>
+      <div class="work-info">
+        <span class="cat-label">Long-Form</span>
+        <h3>傾傾偈子 Ladies N' Gentlemen — EP3 職場多命案</h3>
+        <p>@Emagina Studio</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="longform">
+      <div class="work-thumb embed"><iframe src="https://www.youtube.com/embed/EuIhUvlRQgA" title="傾傾偈子 Ladies N' Gentlemen EP4" loading="lazy" allowfullscreen></iframe></div>
+      <div class="work-info">
+        <span class="cat-label">Long-Form</span>
+        <h3>傾傾偈子 Ladies N' Gentlemen — EP4 母單男難難</h3>
+        <p>@Emagina Studio</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="longform">
+      <div class="work-thumb embed"><iframe src="https://www.youtube.com/embed/dee3oiqupLs" title="不同温层 EP27" loading="lazy" allowfullscreen></iframe></div>
+      <div class="work-info">
+        <span class="cat-label">Long-Form</span>
+        <h3>不同温层 EP27 — 父母想去养老院，我该支持吗？</h3>
+        <p>@BBK Network</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="longform">
+      <div class="work-thumb embed"><iframe src="https://www.youtube.com/embed/NwPHCRYVo0M" title="不同温层 EP20" loading="lazy" allowfullscreen></iframe></div>
+      <div class="work-info">
+        <span class="cat-label">Long-Form</span>
+        <h3>不同温层 EP20 — 花20k买名牌包是虚荣吗？</h3>
+        <p>@BBK Network</p>
+      </div>
+    </div>
+
+    <div class="work-card" data-cat="reels">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DZXWer4CkDR/?igsh=MTQ1Nm16cWQxeW8wcA==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">IG Reel</span>
+        <h3>Kelantan Wayang Kulit</h3>
+        <p>@elaineyying</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="reels">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/Cq2tTqJJam9/?utm_source=ig_web_copy_link&igshid=MzRlODBiNWFlZA%3D%3D" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">IG Reel</span>
+        <h3>1-Minute Sugar Video</h3>
+        <p>@Emagina Studio</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="reels">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/CsOP_uUsa2o/?igsh=MWh4cW14bnF4YjR4MQ==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">IG Reel</span>
+        <h3>咯噔之声</h3>
+        <p>@Emagina Studio</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="reels">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DOvV-gqEjcl/?igsh=MWlpc2E0MDl1Nzl6Zg==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">IG Reel</span>
+        <h3>Abe Yong TikTok 100k!</h3>
+        <p>@abeyong__</p>
+      </div>
+    </div>
+
+    <div class="work-card" data-cat="ads">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DWiblrnDxpx/?igsh=Yjd4eGN4aWdhZTN6" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Social Ad</span>
+        <h3>Silent Velcro</h3>
+        <p>@Granny Ben Malaysia</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="ads">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DV8IMBakYl0/?igsh=OHVlNWZ3Y2VqbnRx" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Social Ad</span>
+        <h3>Chu Chu Collection</h3>
+        <p>@Granny Ben Malaysia</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="ads">
+      <a class="work-thumb link-out" href="https://www.instagram.com/reel/DWdEOdpk53B/?igsh=MXc2MnIwdGkzdDJ6NQ==" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Instagram →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Social Ad</span>
+        <h3>Safari Collection</h3>
+        <p>@Saeson Baby Malaysia</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="ads">
+      <a class="work-thumb link-out" href="https://www.facebook.com/share/v/1F6UWiF8rs/?mibextid=wwXIfr" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Facebook →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Social Ad</span>
+        <h3>Aluminium Trackless Autogate</h3>
+        <p>@L&amp;L Stainless Steel</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="ads">
+      <a class="work-thumb link-out" href="https://www.facebook.com/share/v/1D57AfMU8u/?mibextid=wwXIfr" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Facebook →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Social Ad</span>
+        <h3>Awning</h3>
+        <p>@L&amp;L Stainless Steel</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="ads">
+      <a class="work-thumb link-out" href="https://www.facebook.com/share/r/1CRe5GtvBQ/?mibextid=wwXIfr" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Facebook →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Social Ad</span>
+        <h3>Beleco 皮贴骨项目</h3>
+        <p>@Beleco Clinic</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="ads">
+      <a class="work-thumb link-out" href="https://www.facebook.com/share/v/193N1tR6ey/?mibextid=wwXIfr" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Facebook →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Social Ad</span>
+        <h3>Beleco Stem Cell</h3>
+        <p>@Beleco Clinic</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="ads">
+      <a class="work-thumb link-out" href="https://www.facebook.com/share/v/1HQgm4RZre/?mibextid=wwXIfr" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Facebook →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Social Ad</span>
+        <h3>Beleco Ultherapy</h3>
+        <p>@Beleco Clinic</p>
+      </div>
+    </div>
+    <div class="work-card" data-cat="ads">
+      <a class="work-thumb link-out" href="https://www.facebook.com/share/v/1EG7UULwGP/?mibextid=wwXIfr" target="_blank" rel="noopener">
+        <div class="play-sm"></div>
+        <span class="ext-label">View on Facebook →</span>
+      </a>
+      <div class="work-info">
+        <span class="cat-label">Social Ad</span>
+        <h3>Beleco HIFU</h3>
+        <p>@Beleco Clinic</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="work-note reveal">Long-form pieces are embedded directly from YouTube. Reels and ads link out to Instagram or Facebook — neither platform allows reliable inline embeds on outside sites, so these open in a new tab instead. Give each project a real title/client name by editing the &lt;h3&gt; in its .work-info block.</p>
+</section>
+
+<!-- ===== ABOUT + SERVICES ===== -->
+<section class="about container" id="about">
+  <div class="about-copy reveal">
+    <div class="section-eyebrow">About</div>
+    <h2 style="font-size:1.9rem; margin-bottom:18px;">Jonathan Go</h2>
+    <p>Freelance video editor working across long-form content, Instagram reels, and social media ads. Comfortable moving fast on quick-turnaround ad edits and slower, more considered long-form cuts alike.</p>
+    <p>Also active on set as gaffer, audio, assistant director, and production assistant — so briefs that need someone who understands both production and post are a good fit.</p>
+    <div class="skills">
+      <span class="skill-tag">Premiere Pro</span>
+      <span class="skill-tag">CapCut</span>
+      <span class="skill-tag">Lighting</span>
+      <span class="skill-tag">Sound Recording</span>
+      <span class="skill-tag">Scheduling</span>
+    </div>
+  </div>
+
+  <div class="services reveal">
+    <div class="section-eyebrow">Services</div>
+    <div class="service-list">
+      <div class="service-item">
+        <div>
+          <h3>Long-form editing</h3>
+          <p>Interviews, brand films, documentary-style content.</p>
+        </div>
+        <span class="num mono">01</span>
+      </div>
+      <div class="service-item">
+        <div>
+          <h3>IG Reels &amp; short-form</h3>
+          <p>Fast-paced, platform-native cuts built for retention.</p>
+        </div>
+        <span class="num mono">02</span>
+      </div>
+      <div class="service-item">
+        <div>
+          <h3>Social media ads</h3>
+          <p>Quick-turnaround edits for paid campaigns.</p>
+        </div>
+        <span class="num mono">03</span>
+      </div>
+      <div class="service-item">
+        <div>
+          <h3>On-set production</h3>
+          <p>Gaffer, audio, AD, or production assistant — solo or as part of a small crew.</p>
+        </div>
+        <span class="num mono">04</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="contact container" id="contact">
+  <div class="section-eyebrow reveal">Get in touch</div>
+  <h2 class="reveal">Got a project? <br>Let's talk timeline.</h2>
+  <p class="contact-sub reveal">Fastest way to reach me is email — tell me a bit about the project and I'll get back to you within a day or two.</p>
+  <div class="contact-actions reveal">
+    <a href="mailto:jonathango9202@gmail.com" class="btn-primary">EMAIL ME →</a>
+    <div class="contact-links">
+      <a href="https://www.instagram.com/jonathan_yh?igsh=NW5mcjd6b3htOTZ1&utm_source=qr" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://wa.me/60108819667" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://www.linkedin.com/in/yi-hang-go-528823297/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer class="container">
+  <span>© 2026 Jonathan Go — Video Editor / Gaffer / Audio / AD / PA</span>
+  <span>Based in Perth, WA — available for remote &amp; on-location work</span>
+</footer>
+
+<script>
+  // Ticking timecode in nav — cosmetic, ties to the timeline motif
+  let frame = 0;
+  function pad(n){ return n.toString().padStart(2,'0'); }
+  function tick(){
+    frame++;
+    const totalFrames = frame;
+    const fps = 24;
+    const ff = totalFrames % fps;
+    const totalSec = Math.floor(totalFrames / fps);
+    const ss = totalSec % 60;
+    const mm = Math.floor(totalSec/60) % 60;
+    const hh = Math.floor(totalSec/3600);
+    const el = document.getElementById('navClock');
+    if(el) el.textContent = `${pad(hh)}:${pad(mm)}:${pad(ss)}:${pad(ff)}`;
+  }
+  setInterval(tick, 1000/24);
+
+  // Filters — scoped per section so Work and Credits filter independently
+  document.querySelectorAll('.filters').forEach(filterGroup => {
+    const grid = document.getElementById(filterGroup.dataset.target);
+    if (!grid) return;
+    const btns = filterGroup.querySelectorAll('.filter-btn');
+    const cards = grid.querySelectorAll('.work-card');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        cards.forEach(c => {
+          c.style.display = (f === 'all' || c.dataset.cat === f) ? '' : 'none';
+        });
+      });
+    });
+  });
+
+  // Reveal on scroll
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revealEls = document.querySelectorAll('.reveal');
+  if(prefersReduced){
+    revealEls.forEach(el => el.classList.add('in'));
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
+  }
+</script>
+
+</body>
+</html>
