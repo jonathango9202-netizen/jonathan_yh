@@ -146,6 +146,54 @@
   .nav-links{display:none;}
   @media (min-width:760px){ .nav-links{display:flex;} }
 
+  .nav-toggle{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:5px;
+    width:32px;
+    height:32px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:0;
+  }
+  .nav-toggle span{
+    display:block;
+    width:20px;
+    height:2px;
+    background:var(--paper);
+    transition:transform 0.25s ease, opacity 0.25s ease;
+  }
+  .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-toggle.open span:nth-child(2){opacity:0;}
+  .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  @media (min-width:760px){ .nav-toggle{display:none;} }
+
+  .mobile-menu{
+    display:none;
+    flex-direction:column;
+    background:rgba(10,11,13,0.97);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+    max-height:0;
+    transition:max-height 0.3s ease;
+  }
+  .mobile-menu.open{
+    display:flex;
+    max-height:320px;
+  }
+  .mobile-menu a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+    color:var(--grey);
+    padding:16px 18px;
+    border-top:1px solid var(--line);
+  }
+  .mobile-menu a:hover{color:var(--paper);}
+  @media (min-width:760px){ .mobile-menu{display:none !important;} }
+
   /* ===== HERO ===== */
   .hero{
     min-height:100svh;
@@ -627,6 +675,16 @@
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
     </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu mono" id="mobileMenu">
+    <a href="#tracks">Roles</a>
+    <a href="#credits">Credits</a>
+    <a href="#work">Work</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
   </div>
 </nav>
 
@@ -757,6 +815,7 @@
       <div class="work-info">
         <span class="cat-label">Lighting</span>
         <h3>Hada Labo X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="lighting">
@@ -767,6 +826,7 @@
       <div class="work-info">
         <span class="cat-label">Lighting</span>
         <h3>Colgate X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="lighting">
@@ -777,6 +837,7 @@
       <div class="work-info">
         <span class="cat-label">Lighting</span>
         <h3>Hada Labo X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="lighting">
@@ -787,6 +848,7 @@
       <div class="work-info">
         <span class="cat-label">Lighting</span>
         <h3>The Delivery Vault</h3>
+        <p>@Emagina Studio</p>
       </div>
     </div>
     <div class="work-card" data-cat="lighting">
@@ -797,6 +859,7 @@
       <div class="work-info">
         <span class="cat-label">Lighting</span>
         <h3>Moodfree X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="lighting">
@@ -807,6 +870,7 @@
       <div class="work-info">
         <span class="cat-label">Lighting</span>
         <h3>Stryv X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="lighting">
@@ -817,6 +881,7 @@
       <div class="work-info">
         <span class="cat-label">Lighting</span>
         <h3>Taobao X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="lighting">
@@ -827,6 +892,7 @@
       <div class="work-info">
         <span class="cat-label">Lighting</span>
         <h3>Kewpie X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="lighting">
@@ -837,6 +903,7 @@
       <div class="work-info">
         <span class="cat-label">Lighting</span>
         <h3>Scentify X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="lighting">
@@ -847,6 +914,7 @@
       <div class="work-info">
         <span class="cat-label">Lighting</span>
         <h3>Darlie X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="sound">
@@ -857,6 +925,7 @@
       <div class="work-info">
         <span class="cat-label">Sound</span>
         <h3>Takdir Kedua</h3>
+        <p>@Do Drama</p>
       </div>
     </div>
     <div class="work-card" data-cat="sound">
@@ -867,6 +936,7 @@
       <div class="work-info">
         <span class="cat-label">Sound</span>
         <h3>Puteri Gantian</h3>
+        <p>@Do Drama</p>
       </div>
     </div>
     <div class="work-card" data-cat="sound">
@@ -877,6 +947,7 @@
       <div class="work-info">
         <span class="cat-label">Sound</span>
         <h3>40 Sahaja</h3>
+        <p>@Do Drama</p>
       </div>
     </div>
     <div class="work-card" data-cat="sound">
@@ -887,6 +958,7 @@
       <div class="work-info">
         <span class="cat-label">Sound</span>
         <h3>《酒店智多星》</h3>
+        <p>@Resorts World Genting, Multimedia</p>
       </div>
     </div>
     <div class="work-card" data-cat="pa">
@@ -897,6 +969,7 @@
       <div class="work-info">
         <span class="cat-label">Production Assistant</span>
         <h3>100 Plus X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="pa">
@@ -907,6 +980,7 @@
       <div class="work-info">
         <span class="cat-label">Production Assistant</span>
         <h3>Kleenex X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="pa">
@@ -917,6 +991,7 @@
       <div class="work-info">
         <span class="cat-label">Production Assistant</span>
         <h3>Proton X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="pa">
@@ -937,6 +1012,7 @@
       <div class="work-info">
         <span class="cat-label">Production Assistant</span>
         <h3>Ecovacs X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="pa">
@@ -947,6 +1023,7 @@
       <div class="work-info">
         <span class="cat-label">Production Assistant</span>
         <h3>Eucerin X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="pa">
@@ -957,6 +1034,7 @@
       <div class="work-info">
         <span class="cat-label">Production Assistant</span>
         <h3>KFC X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="pa">
@@ -967,6 +1045,7 @@
       <div class="work-info">
         <span class="cat-label">Production Assistant</span>
         <h3>Darlie X Elaine</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card" data-cat="ad">
@@ -974,7 +1053,8 @@
       <div class="work-info">
         <span class="cat-label">Assistant Director</span>
         <h3>《The Split Program 頑美世界》</h3>
-        <p>Position: 2nd AD</p>
+        <p>@Emagina Studio</p>
+        <p>Position: 2nd Assistant Director, Set Runner</p>
       </div>
     </div>
     <div class="work-card" data-cat="producer">
@@ -985,6 +1065,7 @@
       <div class="work-info">
         <span class="cat-label">Producer</span>
         <h3>《Incompatible Bonds 不適合》</h3>
+        <p>@Emagina Studio</p>
         <p>Position: Producer, Story, 2nd Cam, Lighting (Gaffer), Props, Editor</p>
       </div>
     </div>
@@ -1073,6 +1154,7 @@
         <span class="cat-label">IG Reel</span>
         <h3>咯噔之声</h3>
         <p>@Emagina Studio</p>
+        <p>@dondon_dailynews</p>
       </div>
     </div>
     <div class="work-card" data-cat="reels">
@@ -1280,6 +1362,24 @@
     if(el) el.textContent = `${pad(hh)}:${pad(mm)}:${pad(ss)}:${pad(ff)}`;
   }
   setInterval(tick, 1000/24);
+
+  // Mobile hamburger menu
+  (function(){
+    const toggle = document.getElementById('navToggle');
+    const menu = document.getElementById('mobileMenu');
+    if(!toggle || !menu) return;
+    function close(){
+      toggle.classList.remove('open');
+      menu.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+    toggle.addEventListener('click', () => {
+      const isOpen = menu.classList.toggle('open');
+      toggle.classList.toggle('open', isOpen);
+      toggle.setAttribute('aria-expanded', String(isOpen));
+    });
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+  })();
 
   // Hero picture carousel
   (function(){
