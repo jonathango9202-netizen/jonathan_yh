@@ -430,10 +430,10 @@
     gap:22px;
   }
   @media (max-width:900px){
-    .work-grid{grid-template-columns:repeat(2, 1fr);}
+    .work-grid{grid-template-columns:repeat(2, 1fr); grid-auto-rows:110px;}
   }
   @media (max-width:640px){
-    .work-grid{grid-template-columns:repeat(2, 1fr);}
+    .work-grid{grid-template-columns:repeat(2, 1fr); grid-auto-rows:85px;}
   }
   .work-card{
     background:var(--panel);
@@ -443,7 +443,7 @@
     transition:transform 0.25s ease, border-color 0.25s ease;
   }
   .work-card.span-portrait{grid-row:span 7;}
-  .work-card.span-landscape{grid-row:span 3;}
+  .work-card.span-landscape{grid-row:span 4;}
   .work-card.span-square{grid-row:span 5;}
   .work-card:hover{
     transform:translateY(-4px);
@@ -1222,7 +1222,7 @@
       </div>
     </div>
     <div class="work-card span-portrait" data-cat="ads">
-      <a class="work-thumb link-out has-thumb" style="background-image:url('social-media-ads/awning.jpg');aspect-ratio:9/16" href="https://www.facebook.com/share/v/1D57AfMU8u/?mibextid=wwXIfr" target="_blank" rel="noopener">
+      <a class="work-thumb link-out has-thumb" style="background-image:url('social-media-ads/awning.png');aspect-ratio:9/16" href="https://www.facebook.com/share/v/1D57AfMU8u/?mibextid=wwXIfr" target="_blank" rel="noopener">
         <div class="play-sm"></div>
         <span class="ext-label">View on Facebook →</span>
       </a>
