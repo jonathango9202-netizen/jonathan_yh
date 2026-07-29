@@ -1633,11 +1633,15 @@
       const name = (nameField.value || '').trim();
       const brand = (brandField.value || '').trim();
       const project = (projectField.value || '').trim();
-      let msg = 'Hi Jonathan, ';
-      if (name) msg += `I'm ${name}. `;
-      if (brand) msg += `Brand/project: ${brand}. `;
-      msg += project ? `Here's what I'm looking to edit: ${project}` : "I'd like to talk about a video project.";
-      return msg;
+
+      const lines = ['Hi Jonathan,', ''];
+      if (name) lines.push(`Name: ${name}`);
+      if (brand) lines.push(`Brand/Project: ${brand}`);
+      lines.push('');
+      lines.push('What I\'m looking to edit:');
+      lines.push(project || '(details to follow)');
+
+      return lines.join('\n');
     }
 
     waBtn.addEventListener('click', () => {
@@ -1647,7 +1651,7 @@
 
     emailBtn.addEventListener('click', () => {
       const subject = encodeURIComponent('Video editing inquiry');
-      const body = encodeURIComponent(buildMessage());
+      const body = encodeURIComponent(buildMessage().replace(/\n/g, '\r\n'));
       window.location.href = `mailto:jonathango9202@gmail.com?subject=${subject}&body=${body}`;
     });
   })();
