@@ -433,10 +433,12 @@
   }
   @media (max-width:900px){
     .work-grid{grid-template-columns:repeat(2, 1fr); grid-auto-rows:110px;}
+    .work-thumb{max-height:60vh;}
   }
   @media (max-width:640px){
     .work-grid{grid-template-columns:1fr; grid-auto-flow:row;}
     .work-card{grid-row:auto !important;}
+    .work-thumb{max-height:55vh;}
   }
   .work-card{
     background:var(--panel);
