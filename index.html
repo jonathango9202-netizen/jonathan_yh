@@ -456,6 +456,7 @@
   }
   .work-thumb{
     aspect-ratio:16/9;
+    width:100%;
     background:linear-gradient(135deg, #1c1e22, #101216);
     position:relative;
     display:flex;
@@ -502,8 +503,10 @@
     color:var(--grey);
   }
   .work-thumb.link-out.has-thumb{
-    background-size:cover;
+    background-size:contain;
+    background-repeat:no-repeat;
     background-position:center;
+    background-color:#0A0B0D;
     position:relative;
   }
   .work-thumb.link-out.has-thumb::before{
