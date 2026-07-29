@@ -271,8 +271,10 @@
     position:relative;
     display:flex;
     align-items:flex-end;
-    background-size:cover;
+    background-size:contain;
+    background-repeat:no-repeat;
     background-position:center;
+    background-color:#0A0B0D;
   }
   .carousel-slide::after{
     content:'';
@@ -433,7 +435,8 @@
     .work-grid{grid-template-columns:repeat(2, 1fr); grid-auto-rows:110px;}
   }
   @media (max-width:640px){
-    .work-grid{grid-template-columns:repeat(2, 1fr); grid-auto-rows:85px;}
+    .work-grid{grid-template-columns:1fr; grid-auto-flow:row;}
+    .work-card{grid-row:auto !important;}
   }
   .work-card{
     background:var(--panel);
@@ -545,63 +548,114 @@
     padding-left:14px;
   }
 
-  /* ===== ABOUT + SERVICES ===== */
+  /* ===== ABOUT ===== */
   .about{
     padding-top:100px;
     padding-bottom:100px;
     border-top:1px solid var(--line);
     display:grid;
     grid-template-columns:1fr;
-    gap:56px;
+    gap:40px;
   }
   @media (min-width:860px){
-    .about{grid-template-columns:1fr 1fr;}
+    .about{grid-template-columns:300px 1fr; gap:56px; align-items:start;}
+  }
+  .about-photo{
+    aspect-ratio:1/1;
+    border:1px solid var(--line);
+    border-radius:6px;
+    background:var(--panel);
+    overflow:hidden;
+  }
+  .about-photo img{width:100%; height:100%; object-fit:cover; border-radius:5px;}
+  .about-photo-placeholder{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--grey-dim);
+    line-height:1.6;
   }
   .about-copy p{
     color:var(--grey);
     font-size:16px;
     margin-bottom:16px;
-    max-width:480px;
+    max-width:520px;
   }
-  .skills{
+  .about-stats{
     display:flex;
     flex-wrap:wrap;
-    gap:8px;
-    margin-top:24px;
+    gap:36px;
+    margin-top:32px;
+    padding-top:28px;
+    border-top:1px solid var(--line);
   }
-  .skill-tag{
+  .stat-num{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:2rem;
+    font-weight:700;
+    color:var(--amber);
+    line-height:1;
+  }
+  .stat-label{
     font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    color:var(--grey);
-    border:1px solid var(--line);
-    padding:6px 10px;
-    border-radius:3px;
+    font-size:10.5px;
+    color:var(--grey-dim);
+    text-transform:uppercase;
+    margin-top:6px;
+    display:block;
   }
 
-  .service-list{border-top:1px solid var(--line);}
-  .service-item{
-    padding:20px 0;
-    border-bottom:1px solid var(--line);
-    display:flex;
-    justify-content:space-between;
-    gap:16px;
+  /* ===== SERVICES ===== */
+  .services-section{
+    padding-top:100px;
+    padding-bottom:100px;
+    border-top:1px solid var(--line);
   }
-  .service-item h3{
-    font-size:16px;
-    font-weight:500;
+  .service-cards{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:20px;
   }
-  .service-item p{
-    font-size:13.5px;
-    color:var(--grey-dim);
-    margin-top:4px;
-    max-width:300px;
+  @media (min-width:760px){
+    .service-cards{grid-template-columns:repeat(3, 1fr);}
   }
-  .service-item .num{
+  .service-card{
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:28px 26px;
+    background:var(--panel);
+  }
+  .service-card .service-tag{
     font-family:'IBM Plex Mono', monospace;
     font-size:11px;
-    color:var(--grey-dim);
-    white-space:nowrap;
+    color:var(--amber);
+    text-transform:uppercase;
+    margin-bottom:14px;
+    display:block;
   }
+  .service-card h3{
+    font-size:20px;
+    margin-bottom:10px;
+  }
+  .service-card > p{
+    color:var(--grey);
+    font-size:14.5px;
+    margin-bottom:20px;
+  }
+  .service-meta{
+    border-top:1px solid var(--line);
+    padding-top:16px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .service-meta-row{
+    display:flex;
+    justify-content:space-between;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+  }
+  .service-meta-row span:first-child{color:var(--grey-dim);}
+  .service-meta-row span:last-child{color:var(--paper); text-align:right;}
 
   /* ===== CONTACT ===== */
   .contact{
@@ -618,13 +672,91 @@
     margin-top:18px;
     max-width:480px;
   }
-  .contact-actions{
-    margin-top:40px;
+  .contact-grid{
+    margin-top:48px;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:40px;
+  }
+  @media (min-width:860px){
+    .contact-grid{grid-template-columns:1fr 1.2fr; gap:64px;}
+  }
+  .contact-info-list{border-top:1px solid var(--line);}
+  .contact-info-row{
+    padding:18px 0;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+  }
+  .contact-info-row span:first-child{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--grey-dim);
+    text-transform:uppercase;
+  }
+  .contact-info-row a{
+    font-weight:500;
+    transition:color 0.2s;
+  }
+  .contact-info-row a:hover{color:var(--cyan);}
+  .contact-form{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+  .form-field label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--grey-dim);
+    text-transform:uppercase;
+    margin-bottom:8px;
+    display:block;
+  }
+  .form-field input,
+  .form-field textarea{
+    width:100%;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:12px 14px;
+    color:var(--paper);
+    font-family:'Work Sans', sans-serif;
+    font-size:14px;
+    resize:vertical;
+  }
+  .form-field input:focus,
+  .form-field textarea:focus{
+    outline:none;
+    border-color:var(--amber);
+  }
+  .form-actions{
     display:flex;
     flex-wrap:wrap;
-    gap:16px;
-    align-items:center;
+    gap:12px;
+    margin-top:6px;
   }
+  .btn-secondary{
+    background:transparent;
+    color:var(--paper);
+    border:1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    font-weight:600;
+    padding:14px 24px;
+    border-radius:4px;
+    cursor:pointer;
+    transition:border-color 0.2s;
+  }
+  .btn-secondary:hover{border-color:var(--grey);}
+  .form-note{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--grey-dim);
+    margin-top:2px;
+  }
+
   .btn-primary{
     background:var(--amber);
     color:var(--void);
@@ -634,6 +766,8 @@
     padding:15px 26px;
     border-radius:4px;
     display:inline-block;
+    border:none;
+    cursor:pointer;
     transition:opacity 0.2s;
   }
   .btn-primary:hover{opacity:0.85;}
@@ -684,6 +818,7 @@
       <a href="#credits">Credits</a>
       <a href="#work">Work</a>
       <a href="#about">About</a>
+      <a href="#services">Services</a>
       <a href="#contact">Contact</a>
     </div>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
@@ -1070,6 +1205,7 @@
       <div class="work-info">
         <span class="cat-label">Production Assistant</span>
         <h3>《马上还钱》新年MV</h3>
+        <p>@elaineyying</p>
       </div>
     </div>
     <div class="work-card span-landscape" data-cat="ad">
@@ -1175,7 +1311,7 @@
       </a>
       <div class="work-info">
         <span class="cat-label">IG Reel</span>
-        <h3>咯噔之声</h3>
+        <h3>咯噔之声 EP1-12</h3>
         <p>@Emagina Studio</p>
         <p>@dondon_dailynews</p>
       </div>
@@ -1287,51 +1423,62 @@
 
 <!-- ===== ABOUT + SERVICES ===== -->
 <section class="about container" id="about">
+  <div class="about-photo reveal">
+    <img src="self-images/my-pic.jpg" alt="Jonathan Go">
+  </div>
   <div class="about-copy reveal">
     <div class="section-eyebrow">About</div>
     <h2 style="font-size:1.9rem; margin-bottom:18px;">Jonathan Go</h2>
     <p>Freelance video editor working across long-form content, Instagram reels, and social media ads. Comfortable moving fast on quick-turnaround ad edits and slower, more considered long-form cuts alike.</p>
     <p>Also active on set as gaffer, audioman, assistant director, production assistant, and producer — so briefs that need someone who understands both production and post are a good fit.</p>
-    <div class="skills">
-      <span class="skill-tag">Premiere Pro</span>
-      <span class="skill-tag">CapCut</span>
-      <span class="skill-tag">Lighting</span>
-      <span class="skill-tag">Sound Recording</span>
-      <span class="skill-tag">Scheduling</span>
-      <span class="skill-tag">Producing</span>
+    <div class="about-stats">
+      <div>
+        <span class="stat-num">110+</span>
+        <span class="stat-label">Videos Edited</span>
+      </div>
+      <div>
+        <span class="stat-num">48H</span>
+        <span class="stat-label">Typical Turnaround</span>
+      </div>
     </div>
   </div>
+</section>
 
-  <div class="services reveal">
+<!-- ===== SERVICES ===== -->
+<section class="services-section container" id="services">
+  <div class="section-head reveal">
     <div class="section-eyebrow">Services</div>
-    <div class="service-list">
-      <div class="service-item">
-        <div>
-          <h3>Long-form editing</h3>
-          <p>Interviews, brand films, documentary-style content.</p>
-        </div>
-        <span class="num mono">01</span>
+    <h2>What I can take off your plate</h2>
+  </div>
+  <div class="service-cards reveal">
+    <div class="service-card">
+      <span class="service-tag">01 / Long-Form</span>
+      <h3>YouTube editing</h3>
+      <p>Full edit from raw footage to upload-ready file — story structure, pacing, and sound design.</p>
+      <div class="service-meta">
+        <div class="service-meta-row"><span>Turnaround</span><span>5–7 days</span></div>
+        <div class="service-meta-row"><span>Includes</span><span>Color, sound, captions</span></div>
+        <div class="service-meta-row"><span>Revisions</span><span>2 rounds</span></div>
       </div>
-      <div class="service-item">
-        <div>
-          <h3>IG Reels &amp; short-form</h3>
-          <p>Fast-paced, platform-native cuts built for retention.</p>
-        </div>
-        <span class="num mono">02</span>
+    </div>
+    <div class="service-card">
+      <span class="service-tag">02 / Short-Form</span>
+      <h3>Reels &amp; shorts</h3>
+      <p>Hook-driven cuts built for retention on Instagram and TikTok, with motion type and trend-aware pacing.</p>
+      <div class="service-meta">
+        <div class="service-meta-row"><span>Turnaround</span><span>2–3 days</span></div>
+        <div class="service-meta-row"><span>Includes</span><span>Captions, motion type</span></div>
+        <div class="service-meta-row"><span>Revisions</span><span>2 rounds</span></div>
       </div>
-      <div class="service-item">
-        <div>
-          <h3>Social media ads</h3>
-          <p>Quick-turnaround edits for paid campaigns.</p>
-        </div>
-        <span class="num mono">03</span>
-      </div>
-      <div class="service-item">
-        <div>
-          <h3>On-set production</h3>
-          <p>Gaffer, audioman, assistant director, production assistant, or producer — solo or as part of a small crew.</p>
-        </div>
-        <span class="num mono">04</span>
+    </div>
+    <div class="service-card">
+      <span class="service-tag">03 / Paid Media</span>
+      <h3>Social Media Ads</h3>
+      <p>Quick-turn cuts for feed and story placements, built around a clear offer and a clear CTA.</p>
+      <div class="service-meta">
+        <div class="service-meta-row"><span>Turnaround</span><span>24–48 hrs</span></div>
+        <div class="service-meta-row"><span>Includes</span><span>Multiple aspect ratios</span></div>
+        <div class="service-meta-row"><span>Revisions</span><span>2 rounds</span></div>
       </div>
     </div>
   </div>
@@ -1340,15 +1487,40 @@
 <!-- ===== CONTACT ===== -->
 <section class="contact container" id="contact">
   <div class="section-eyebrow reveal">Get in touch</div>
-  <h2 class="reveal">Got a project? <br>Let's talk timeline.</h2>
-  <p class="contact-sub reveal">Fastest way to reach me is WhatsApp — tell me a bit about the project and I'll get back to you within a day or two.</p>
-  <div class="contact-actions reveal">
-    <a href="https://wa.me/60108819667" target="_blank" rel="noopener" class="btn-primary">WHATSAPP ME →</a>
-    <div class="contact-links">
-      <a href="https://www.instagram.com/jonathan_yh?igsh=NW5mcjd6b3htOTZ1&utm_source=qr" target="_blank" rel="noopener">Instagram</a>
-      <a href="mailto:jonathango9202@gmail.com">Email</a>
-      <a href="https://www.linkedin.com/in/yi-hang-go-528823297/" target="_blank" rel="noopener">LinkedIn</a>
+  <h2 class="reveal">Have a video that<br>needs an edit?</h2>
+  <p class="contact-sub reveal">Tell me a bit about the project and I'll reply within a day or two with next steps and availability.</p>
+
+  <div class="contact-grid">
+    <div class="contact-info-list reveal">
+      <div class="contact-info-row">
+        <span>Instagram</span>
+        <a href="https://www.instagram.com/jonathan_yh?igsh=NW5mcjd6b3htOTZ1&utm_source=qr" target="_blank" rel="noopener">@jonathan_yh</a>
+      </div>
+      <div class="contact-info-row">
+        <span>LinkedIn</span>
+        <a href="https://www.linkedin.com/in/yi-hang-go-528823297/" target="_blank" rel="noopener">Jonathan Go</a>
+      </div>
     </div>
+
+    <form class="contact-form reveal" id="contactForm">
+      <div class="form-field">
+        <label for="cf-name">Name</label>
+        <input type="text" id="cf-name" name="name" placeholder="Your name">
+      </div>
+      <div class="form-field">
+        <label for="cf-brand">Brand / Project Link</label>
+        <input type="text" id="cf-brand" name="brand" placeholder="Website, Instagram, or YouTube handle">
+      </div>
+      <div class="form-field">
+        <label for="cf-project">What are you looking to edit?</label>
+        <textarea id="cf-project" name="project" rows="5" placeholder="Tell me a bit about the project — format, length, deadline..."></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-primary" id="sendWhatsapp">SEND VIA WHATSAPP →</button>
+        <button type="button" class="btn-secondary" id="sendEmail">SEND VIA EMAIL</button>
+      </div>
+      <p class="form-note">Tapping either button opens WhatsApp or your email app with the message pre-filled — nothing is sent from this page directly.</p>
+    </form>
   </div>
 </section>
 
@@ -1358,6 +1530,13 @@
 </footer>
 
 <script>
+  // Always start at the top of the page — prevents browsers from restoring
+  // a mid-page scroll position on reload or when returning via a link.
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+  window.addEventListener('load', () => window.scrollTo(0, 0));
   // Ticking timecode in nav — cosmetic, ties to the timeline motif
   let frame = 0;
   function pad(n){ return n.toString().padStart(2,'0'); }
@@ -1438,6 +1617,39 @@
     }
     start();
     render();
+  })();
+
+  // Contact form — builds a pre-filled WhatsApp or email message from the fields.
+  // No backend involved: this just opens the person's own WhatsApp/email app.
+  (function(){
+    const nameField = document.getElementById('cf-name');
+    const brandField = document.getElementById('cf-brand');
+    const projectField = document.getElementById('cf-project');
+    const waBtn = document.getElementById('sendWhatsapp');
+    const emailBtn = document.getElementById('sendEmail');
+    if (!waBtn || !emailBtn) return;
+
+    function buildMessage(){
+      const name = (nameField.value || '').trim();
+      const brand = (brandField.value || '').trim();
+      const project = (projectField.value || '').trim();
+      let msg = 'Hi Jonathan, ';
+      if (name) msg += `I'm ${name}. `;
+      if (brand) msg += `Brand/project: ${brand}. `;
+      msg += project ? `Here's what I'm looking to edit: ${project}` : "I'd like to talk about a video project.";
+      return msg;
+    }
+
+    waBtn.addEventListener('click', () => {
+      const text = encodeURIComponent(buildMessage());
+      window.open(`https://wa.me/60108819667?text=${text}`, '_blank');
+    });
+
+    emailBtn.addEventListener('click', () => {
+      const subject = encodeURIComponent('Video editing inquiry');
+      const body = encodeURIComponent(buildMessage());
+      window.location.href = `mailto:jonathango9202@gmail.com?subject=${subject}&body=${body}`;
+    });
   })();
 
   // Filters — scoped per section so Work and Credits filter independently
