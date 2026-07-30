@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="https://img.youtube.com/vi/8GRBJvDlItg/hqdefault.jpg">
 <style>
   :root{
     --void:#0A0B0D;
@@ -438,6 +439,40 @@
   @media (max-width:640px){
     .work-grid{grid-template-columns:1fr; grid-auto-flow:row; grid-auto-rows:auto;}
     .work-card{grid-row:auto !important;}
+  }
+
+  /* ===== MOBILE CATEGORY CAROUSELS ===== */
+  .mobile-carousels{display:none;}
+  @media (max-width:640px){
+    .mobile-carousels{display:block; margin-top:8px;}
+    .filters{display:none;}
+    #creditGrid, #workGrid{display:none;}
+  }
+  .mc-category{margin-bottom:36px;}
+  .mc-category-title{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--amber);
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .mc-row{
+    display:flex;
+    gap:14px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    padding-bottom:6px;
+    margin:0 -18px;
+    padding-left:18px;
+    padding-right:18px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .mc-row::-webkit-scrollbar{display:none;}
+  .mc-row .work-card{
+    flex:0 0 82%;
+    max-width:340px;
+    scroll-snap-align:start;
   }
   .work-card{
     background:var(--panel);
@@ -1240,6 +1275,7 @@
   </div>
 
   <p class="work-note reveal">Lighting/Gaffer, Sound, Production Assistant, Assistant Director, and Producer credits are listed. A couple of entries don't have a public link yet — send those over when you have them.</p>
+  <div class="mobile-carousels" id="creditsMobileCarousels"></div>
 </section>
 
 <!-- ===== WORK ===== -->
@@ -1438,6 +1474,7 @@
   </div>
 
   <p class="work-note reveal">Long-form pieces are embedded directly from YouTube. Reels and ads link out to Instagram or Facebook — neither platform allows reliable inline embeds on outside sites, so these open in a new tab instead. Give each project a real title/client name by editing the &lt;h3&gt; in its .work-info block.</p>
+  <div class="mobile-carousels" id="workMobileCarousels"></div>
 </section>
 
 <!-- ===== ABOUT + SERVICES ===== -->
@@ -1549,6 +1586,67 @@
 </footer>
 
 <script>
+  // Build mobile-only horizontal category carousels by cloning the existing
+  // desktop cards (grouped by data-cat). Runs first so later listeners
+  // (YouTube lazy-load, etc.) attach to the clones too.
+  (function(){
+    function buildCarousels(gridId, containerId, labels, order){
+      const grid = document.getElementById(gridId);
+      const container = document.getElementById(containerId);
+      if (!grid || !container) return;
+      container.innerHTML = '';
+
+      order.forEach(cat => {
+        const cards = grid.querySelectorAll(`.work-card[data-cat="${cat}"]`);
+        if (!cards.length) return;
+
+        const section = document.createElement('div');
+        section.className = 'mc-category';
+
+        const title = document.createElement('div');
+        title.className = 'mc-category-title';
+        title.textContent = labels[cat] || cat;
+        section.appendChild(title);
+
+        const row = document.createElement('div');
+        row.className = 'mc-row';
+        cards.forEach(card => row.appendChild(card.cloneNode(true)));
+        section.appendChild(row);
+
+        container.appendChild(section);
+      });
+    }
+
+    buildCarousels('creditGrid', 'creditsMobileCarousels',
+      {lighting:'LX: Gaffer', sound:'A1: Audioman', ad:'AD: Assistant Director', pa:'PA: Production Assistant', producer:'PR: Producer'},
+      ['lighting','sound','ad','pa','producer']
+    );
+    buildCarousels('workGrid', 'workMobileCarousels',
+      {longform:'Long-Form', reels:'IG Reels', ads:'Social Media Ads'},
+      ['longform','reels','ads']
+    );
+  })();
+
+  // Upgrade every YouTube thumbnail to the highest resolution available.
+  // maxresdefault isn't guaranteed for every video, so we verify it actually
+  // loaded a real high-res image (not YouTube's small placeholder) before swapping it in.
+  (function(){
+    function upgrade(el){
+      const bg = el.style.backgroundImage;
+      const match = bg.match(/vi\/([\w-]+)\/hqdefault\.jpg/);
+      if (!match) return;
+      const id = match[1];
+      const hiRes = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+      const test = new Image();
+      test.onload = () => {
+        if (test.naturalWidth >= 640) {
+          el.style.backgroundImage = `url('${hiRes}')`;
+        }
+      };
+      test.src = hiRes;
+    }
+    document.querySelectorAll('[style*="img.youtube.com"]').forEach(upgrade);
+  })();
   // Always start at the top of the page — prevents browsers from restoring
   // a mid-page scroll position on reload or when returning via a link.
   if ('scrollRestoration' in history) {
