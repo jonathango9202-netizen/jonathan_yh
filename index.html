@@ -448,13 +448,24 @@
     .filters{display:none;}
     #creditGrid, #workGrid{display:none;}
   }
-  .mc-category{margin-bottom:36px;}
+  .mc-category{margin-bottom:40px;}
   .mc-category-title{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    color:var(--amber);
-    text-transform:uppercase;
-    margin-bottom:14px;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:19px;
+    color:var(--paper);
+    margin-bottom:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .mc-category-title::before{
+    content:'';
+    width:4px;
+    height:18px;
+    background:var(--amber);
+    border-radius:2px;
+    display:inline-block;
   }
   .mc-row{
     display:flex;
@@ -470,10 +481,17 @@
   }
   .mc-row::-webkit-scrollbar{display:none;}
   .mc-row .work-card{
-    flex:0 0 82%;
-    max-width:340px;
+    flex:0 0 220px;
+    width:220px;
     scroll-snap-align:start;
   }
+  .mc-row .work-thumb{
+    height:280px !important;
+    width:220px !important;
+    aspect-ratio:unset !important;
+    background-size:cover !important;
+  }
+  .mc-row .work-info{width:220px;}
   .work-card{
     background:var(--panel);
     border:1px solid var(--line);
@@ -1610,7 +1628,27 @@
 
         const row = document.createElement('div');
         row.className = 'mc-row';
-        cards.forEach(card => row.appendChild(card.cloneNode(true)));
+        const ROW_HEIGHT = 280;
+        cards.forEach(card => {
+          const clone = card.cloneNode(true);
+          const thumb = clone.querySelector('.work-thumb');
+          let ratio = 16/9; // fallback
+          if (thumb){
+            const styleRatio = thumb.style.aspectRatio; // e.g. "9/16"
+            if (styleRatio && styleRatio.includes('/')){
+              const [w, h] = styleRatio.split('/').map(Number);
+              if (w && h) ratio = w / h;
+            } else if (clone.classList.contains('span-portrait')){
+              ratio = 9/16;
+            } else if (clone.classList.contains('span-square')){
+              ratio = 1;
+            } else if (card.dataset.cat === 'reels' && !styleRatio){
+              ratio = 9/16;
+            }
+            thumb.style.width = `${Math.round(ROW_HEIGHT * ratio)}px`;
+          }
+          row.appendChild(clone);
+        });
         section.appendChild(row);
 
         container.appendChild(section);
