@@ -488,6 +488,23 @@
   }
   .work-thumb.embed{padding:0;}
   .work-thumb.embed iframe{width:100%; height:100%; border:0; display:block;}
+  .work-thumb.embed.yt-lazy{
+    background-size:cover;
+    background-position:center;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .work-thumb.embed.yt-lazy .play-sm{
+    width:56px; height:56px;
+    background:rgba(10,11,13,0.55);
+    border:1px solid rgba(242,241,237,0.4);
+  }
+  .work-thumb.embed.yt-lazy .play-sm::after{
+    border-width:9px 0 9px 15px;
+    margin-left:3px;
+  }
   .work-thumb.link-out{
     flex-direction:column;
     gap:10px;
@@ -502,10 +519,8 @@
     color:var(--grey);
   }
   .work-thumb.link-out.has-thumb{
-    background-size:contain;
-    background-repeat:no-repeat;
+    background-size:cover;
     background-position:center;
-    background-color:#0A0B0D;
     position:relative;
   }
   .work-thumb.link-out.has-thumb::before{
@@ -1205,7 +1220,7 @@
       </div>
     </div>
     <div class="work-card span-landscape" data-cat="pa">
-      <div class="work-thumb embed"><iframe src="https://www.youtube.com/embed/xqKnA12pIw0" title="《马上还钱》新年MV" loading="lazy" allowfullscreen></iframe></div>
+      <div class="work-thumb embed yt-lazy" data-video-id="xqKnA12pIw0" style="background-image:url('https://img.youtube.com/vi/xqKnA12pIw0/hqdefault.jpg')" role="button" tabindex="0" aria-label="Play 《马上还钱》新年MV"><div class="play-sm"></div></div>
       <div class="work-info">
         <span class="cat-label">Production Assistant</span>
         <h3>《马上还钱》新年MV</h3>
@@ -1213,7 +1228,7 @@
       </div>
     </div>
     <div class="work-card span-landscape" data-cat="ad">
-      <div class="work-thumb embed"><iframe src="https://www.youtube.com/embed/AHLjUwURkzo" title="The Split Program 頑美世界" loading="lazy" allowfullscreen></iframe></div>
+      <div class="work-thumb embed yt-lazy" data-video-id="AHLjUwURkzo" style="background-image:url('https://img.youtube.com/vi/AHLjUwURkzo/hqdefault.jpg')" role="button" tabindex="0" aria-label="Play The Split Program 頑美世界"><div class="play-sm"></div></div>
       <div class="work-info">
         <span class="cat-label">Assistant Director</span>
         <h3>《The Split Program 頑美世界》</h3>
@@ -1243,7 +1258,7 @@
 
   <div class="work-grid" id="workGrid">
     <div class="work-card span-landscape" data-cat="longform">
-      <div class="work-thumb embed"><iframe src="https://www.youtube.com/embed/8GRBJvDlItg" title="傾傾偈子 Ladies N' Gentlemen EP3" loading="lazy" allowfullscreen></iframe></div>
+      <div class="work-thumb embed yt-lazy" data-video-id="8GRBJvDlItg" style="background-image:url('https://img.youtube.com/vi/8GRBJvDlItg/hqdefault.jpg')" role="button" tabindex="0" aria-label="Play 傾傾偈子 Ladies N' Gentlemen EP3"><div class="play-sm"></div></div>
       <div class="work-info">
         <span class="cat-label">Long-Form</span>
         <h3>傾傾偈子 Ladies N' Gentlemen — EP3 職場多命案</h3>
@@ -1251,7 +1266,7 @@
       </div>
     </div>
     <div class="work-card span-landscape" data-cat="longform">
-      <div class="work-thumb embed"><iframe src="https://www.youtube.com/embed/EuIhUvlRQgA" title="傾傾偈子 Ladies N' Gentlemen EP4" loading="lazy" allowfullscreen></iframe></div>
+      <div class="work-thumb embed yt-lazy" data-video-id="EuIhUvlRQgA" style="background-image:url('https://img.youtube.com/vi/EuIhUvlRQgA/hqdefault.jpg')" role="button" tabindex="0" aria-label="Play 傾傾偈子 Ladies N' Gentlemen EP4"><div class="play-sm"></div></div>
       <div class="work-info">
         <span class="cat-label">Long-Form</span>
         <h3>傾傾偈子 Ladies N' Gentlemen — EP4 母單男難難</h3>
@@ -1259,7 +1274,7 @@
       </div>
     </div>
     <div class="work-card span-landscape" data-cat="longform">
-      <div class="work-thumb embed"><iframe src="https://www.youtube.com/embed/dee3oiqupLs" title="不同温层 EP27" loading="lazy" allowfullscreen></iframe></div>
+      <div class="work-thumb embed yt-lazy" data-video-id="dee3oiqupLs" style="background-image:url('https://img.youtube.com/vi/dee3oiqupLs/hqdefault.jpg')" role="button" tabindex="0" aria-label="Play 不同温层 EP27"><div class="play-sm"></div></div>
       <div class="work-info">
         <span class="cat-label">Long-Form</span>
         <h3>不同温层 EP27 — 父母想去养老院，我该支持吗？</h3>
@@ -1267,7 +1282,7 @@
       </div>
     </div>
     <div class="work-card span-landscape" data-cat="longform">
-      <div class="work-thumb embed"><iframe src="https://www.youtube.com/embed/NwPHCRYVo0M" title="不同温层 EP20" loading="lazy" allowfullscreen></iframe></div>
+      <div class="work-thumb embed yt-lazy" data-video-id="NwPHCRYVo0M" style="background-image:url('https://img.youtube.com/vi/NwPHCRYVo0M/hqdefault.jpg')" role="button" tabindex="0" aria-label="Play 不同温层 EP20"><div class="play-sm"></div></div>
       <div class="work-info">
         <span class="cat-label">Long-Form</span>
         <h3>不同温层 EP20 — 花20k买名牌包是虚荣吗？</h3>
@@ -1575,6 +1590,17 @@
     });
     menu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
   })();
+
+  // YouTube thumbnails — load the real player only on click, so visitors
+  // always see the clean official thumbnail first instead of a random video frame.
+  document.querySelectorAll('.yt-lazy').forEach(el => {
+    function load(){
+      const id = el.dataset.videoId;
+      el.outerHTML = `<div class="work-thumb embed"><iframe src="https://www.youtube.com/embed/${id}?autoplay=1" title="YouTube video" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>`;
+    }
+    el.addEventListener('click', load);
+    el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); load(); } });
+  });
 
   // Hero picture carousel
   (function(){
