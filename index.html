@@ -461,8 +461,7 @@
     .filters{display:none;}
     #creditGrid, #workGrid{display:none;}
   }
-  .mc-category{margin-bottom:40px; scroll-margin-top:90px;}
-  #tracks, #credits, #work, #about, #services, #contact{scroll-margin-top:80px;}
+  .mc-category{margin-bottom:40px;}
   .mc-category-title{
     font-family:'Space Grotesk', sans-serif;
     font-weight:600;
@@ -927,14 +926,12 @@
 
   .reveal{
     opacity:0;
-    transform:translateY(28px) scale(0.98);
-    transition:opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-               transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-    transition-delay:var(--reveal-delay, 0s);
+    transform:translateY(18px);
+    transition:opacity 0.6s ease, transform 0.6s ease;
   }
   .reveal.in{
     opacity:1;
-    transform:translateY(0) scale(1);
+    transform:translateY(0);
   }
 </style>
 </head>
@@ -1100,6 +1097,7 @@
         <span class="cat-label">Lighting</span>
         <h3>Hada Labo X Elaine</h3>
         <p>@elaineyying</p>
+        <p>@Emagina Studio</p>
       </div>
     </div>
     <div class="work-card span-portrait" data-cat="lighting">
@@ -1111,6 +1109,7 @@
         <span class="cat-label">Lighting</span>
         <h3>Colgate X Elaine</h3>
         <p>@elaineyying</p>
+        <p>@Emagina Studio</p>
       </div>
     </div>
     <div class="work-card span-portrait" data-cat="lighting">
@@ -1122,6 +1121,7 @@
         <span class="cat-label">Lighting</span>
         <h3>Hada Labo X Elaine</h3>
         <p>@elaineyying</p>
+        <p>@Emagina Studio</p>
       </div>
     </div>
     <div class="work-card span-portrait" data-cat="lighting">
@@ -1144,6 +1144,7 @@
         <span class="cat-label">Lighting</span>
         <h3>Moodfree X Elaine</h3>
         <p>@elaineyying</p>
+        <p>@Emagina Studio</p>
       </div>
     </div>
     <div class="work-card span-portrait" data-cat="lighting">
@@ -1155,6 +1156,7 @@
         <span class="cat-label">Lighting</span>
         <h3>Stryv X Elaine</h3>
         <p>@elaineyying</p>
+        <p>@Emagina Studio</p>
       </div>
     </div>
     <div class="work-card span-portrait" data-cat="lighting">
@@ -1166,6 +1168,7 @@
         <span class="cat-label">Lighting</span>
         <h3>Taobao X Elaine</h3>
         <p>@elaineyying</p>
+        <p>@Emagina Studio</p>
       </div>
     </div>
     <div class="work-card span-portrait" data-cat="lighting">
@@ -1177,6 +1180,7 @@
         <span class="cat-label">Lighting</span>
         <h3>Kewpie X Elaine</h3>
         <p>@elaineyying</p>
+        <p>@Emagina Studio</p>
       </div>
     </div>
     <div class="work-card span-portrait" data-cat="lighting">
@@ -1188,6 +1192,7 @@
         <span class="cat-label">Lighting</span>
         <h3>Scentify X Elaine</h3>
         <p>@elaineyying</p>
+        <p>@Emagina Studio</p>
       </div>
     </div>
     <div class="work-card span-portrait" data-cat="lighting">
@@ -1199,6 +1204,7 @@
         <span class="cat-label">Lighting</span>
         <h3>Darlie X Elaine</h3>
         <p>@elaineyying</p>
+        <p>@Emagina Studio</p>
       </div>
     </div>
     <div class="work-card span-portrait" data-cat="sound">
@@ -1595,11 +1601,11 @@
     <p>Also active on set as gaffer, audioman, assistant director, production assistant, and producer — so briefs that need someone who understands both production and post are a good fit.</p>
     <div class="about-stats">
       <div>
-        <span class="stat-num" data-count="110" data-suffix="+">0+</span>
+        <span class="stat-num">110+</span>
         <span class="stat-label">Videos Edited</span>
       </div>
       <div>
-        <span class="stat-num" data-count="48" data-suffix="H">0H</span>
+        <span class="stat-num">48H</span>
         <span class="stat-label">Typical Turnaround</span>
       </div>
     </div>
@@ -1770,8 +1776,7 @@
     }).catch(() => {});
   })();
 
-  // Hero role chips — jump to the right section and auto-select the matching
-  // filter tab (desktop) or scroll to the matching row (mobile carousels).
+  // Hero role chips — jump to the right section and auto-select the matching filter tab.
   document.querySelectorAll('.role-chip[data-jump-filter]').forEach(chip => {
     chip.addEventListener('click', (e) => {
       e.preventDefault();
@@ -1779,22 +1784,6 @@
       const grid = document.getElementById(chip.dataset.jumpTarget);
       const filterValue = chip.dataset.jumpFilter;
       const section = document.getElementById(targetId);
-
-      // Mobile: the desktop grid+filters are hidden and replaced by
-      // per-category horizontal carousels, so scroll to that specific row.
-      const mobileContainer = chip.dataset.jumpTarget === 'creditGrid'
-        ? document.getElementById('creditsMobileCarousels')
-        : document.getElementById('workMobileCarousels');
-      const mobileActive = mobileContainer && getComputedStyle(mobileContainer).display !== 'none';
-
-      if (mobileActive && filterValue !== 'all') {
-        const row = mobileContainer.querySelector(`.mc-category[data-cat="${filterValue}"]`);
-        if (row) {
-          row.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          return;
-        }
-      }
-
       if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
       if (grid) {
@@ -1821,7 +1810,6 @@
 
         const section = document.createElement('div');
         section.className = 'mc-category';
-        section.dataset.cat = cat;
 
         const title = document.createElement('div');
         title.className = 'mc-category-title';
@@ -2098,75 +2086,12 @@
     });
   });
 
-  // Subtle parallax on the hero carousel as the page scrolls — a light touch,
-  // not a heavy effect, capped so it never drifts far.
-  (function(){
-    const carousel = document.getElementById('heroCarousel');
-    if (!carousel || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    let ticking = false;
-    function updateParallax(){
-      const rect = carousel.getBoundingClientRect();
-      const offset = Math.max(-30, Math.min(30, rect.top * 0.08));
-      carousel.style.transform = `translateY(${offset}px)`;
-      ticking = false;
-    }
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(updateParallax);
-        ticking = true;
-      }
-    }, { passive: true });
-  })();
-
-  // Animate the About stats counting up from 0 when they scroll into view.
-  (function(){
-    const stats = document.querySelectorAll('.stat-num[data-count]');
-    if (!stats.length) return;
-    const prefersReduced2 = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    function animateCount(el){
-      const target = parseInt(el.dataset.count, 10);
-      const suffix = el.dataset.suffix || '';
-      if (prefersReduced2) { el.textContent = target + suffix; return; }
-      const duration = 1400;
-      const start = performance.now();
-      function tick(now){
-        const progress = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
-        el.textContent = Math.round(target * eased) + suffix;
-        if (progress < 1) requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    }
-
-    const statsIO = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateCount(entry.target);
-          statsIO.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
-    stats.forEach(el => statsIO.observe(el));
-  })();
-
   // Reveal on scroll
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const revealEls = document.querySelectorAll('.reveal');
   if(prefersReduced){
     revealEls.forEach(el => el.classList.add('in'));
   } else {
-    // Stagger siblings that reveal together (e.g. cards in the same grid/row)
-    // so they cascade in one after another, Apple-style, instead of popping at once.
-    const staggerGroups = new Map();
-    revealEls.forEach(el => {
-      const parent = el.parentElement;
-      if (!staggerGroups.has(parent)) staggerGroups.set(parent, 0);
-      const index = staggerGroups.get(parent);
-      el.style.setProperty('--reveal-delay', Math.min(index * 0.08, 0.4) + 's');
-      staggerGroups.set(parent, index + 1);
-    });
-
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if(entry.isIntersecting){
