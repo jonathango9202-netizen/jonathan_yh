@@ -1767,7 +1767,8 @@
     }).catch(() => {});
   })();
 
-  // Hero role chips — jump to the right section and auto-select the matching filter tab.
+  // Hero role chips — jump to the right section and auto-select the matching
+  // filter tab (desktop) or scroll to the matching row (mobile carousels).
   document.querySelectorAll('.role-chip[data-jump-filter]').forEach(chip => {
     chip.addEventListener('click', (e) => {
       e.preventDefault();
@@ -1775,6 +1776,22 @@
       const grid = document.getElementById(chip.dataset.jumpTarget);
       const filterValue = chip.dataset.jumpFilter;
       const section = document.getElementById(targetId);
+
+      // Mobile: the desktop grid+filters are hidden and replaced by
+      // per-category horizontal carousels, so scroll to that specific row.
+      const mobileContainer = chip.dataset.jumpTarget === 'creditGrid'
+        ? document.getElementById('creditsMobileCarousels')
+        : document.getElementById('workMobileCarousels');
+      const mobileActive = mobileContainer && getComputedStyle(mobileContainer).display !== 'none';
+
+      if (mobileActive && filterValue !== 'all') {
+        const row = mobileContainer.querySelector(`.mc-category[data-cat="${filterValue}"]`);
+        if (row) {
+          row.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+      }
+
       if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
       if (grid) {
@@ -1801,6 +1818,7 @@
 
         const section = document.createElement('div');
         section.className = 'mc-category';
+        section.dataset.cat = cat;
 
         const title = document.createElement('div');
         title.className = 'mc-category-title';
